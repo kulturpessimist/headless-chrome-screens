@@ -3,7 +3,7 @@ const   Koa = require("koa"),
         send = require("koa-send"),
         slugg = require("slugg"),
         ps = require('puppeteer-screenshots');
-
+/*
 ██╗  ██╗ ██████╗  █████╗ 
 ██║ ██╔╝██╔═══██╗██╔══██╗
 █████╔╝ ██║   ██║███████║
@@ -40,7 +40,6 @@ app.use(
         --visibility (optional) a comma separated list of css selectors of elements which to hide using JavaScript this is different than `hide` in that it sets the visibility property to hidden rather than the display to none
 */
         options = Object.assign({}, minimal, options);
-
         console.info('Shooting', url, 'with options', options);
 
         await ps.screenshot(options);

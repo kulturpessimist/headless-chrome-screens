@@ -2,7 +2,17 @@ const   Koa = require("koa"),
         r = require("koa-route"),
         send = require("koa-send"),
         slugg = require("slugg"),
-        ps = require('puppeteer-screenshots');
+        browserless = require('browserless')({
+            ignoreHTTPSErrors: true,
+            args:[
+                '--disable-gpu',
+                '--single-process',
+                '--no-zygote',
+                '--no-sandbox',
+                '--hide-scrollbars',
+                '--ash-host-window-bounds=1920x1080*2'
+            ]
+        });
 /*
 ██╗  ██╗ ██████╗  █████╗ 
 ██║ ██╔╝██╔═══██╗██╔══██╗
@@ -24,33 +34,41 @@ app.use(
         let url = ctx.request.query.url || 'https://www.source.horse';
         let options = JSON.parse( ctx.request.query.options || null );
         let download = ctx.request.query.download || false;
-        let filename = slugg(url).substring(0,97);
-
-        let minimal = {url: url, path: `public/screenshots/${filename}.png`};
-/*
-        --url - (required) the url to take screenshot of 
-        --path - (optional) the path to save the screenshot to, default is 'image.png' 
-        --viewportWidth - (optional) the viewport width, default value is 1280 pixels
-        --viewportHeight - (optional) the viewport height, default value is 768 pixels
-        --userAgent - (optional) the user agent to use
-        --mobile - (optional) if this is set to true it will use a mobile user agent and set the viewport width to 320px and the viewport height to 480px, note that this overrides viewportWidth, viewportHeight and userAgent
-        --pdf - (optional) if true saves the screenshot as pdf
-        --mediaTypePrint - (optional) if set emulates the media type as print
-        --hide - (optional) a comma separated list of css selectors of elements which to hide using JavaScript, e.g if there are any pop-ups you want to hide
-        --visibility (optional) a comma separated list of css selectors of elements which to hide using JavaScript this is different than `hide` in that it sets the visibility property to hidden rather than the display to none
-*/
+        let filename = new Buffer.from(url).toString('base64');//slugg(url).substring(0,97);
+         
+        let minimal = {
+            type: 'png',
+            fullPage: true,
+            omitBackground: false,
+            tmpOpts: {
+              path: './public/screenshots/',
+              name: `${filename}`,
+              enoent: false
+            }
+          };
         options = Object.assign({}, minimal, options);
         console.info('Shooting', url, 'with options', options);
+        const page = await browserless.page();
+        page.setViewport({
+            width: 1920, height:1080, deviceScaleFactor:2, isLandscape: true
+        });
+        options.path = `./public/screenshots/${filename}`;
+        const shoot = await page.screenshot(options)
 
-        await ps.screenshot(options);
-        
+        console.log(shoot)
+        //const tmpStream = await browserless.screenshot(url, options)
+        //await send(ctx, shoot);
+        ctx.response.body = shoot; 
+        return ctx;
         if( download === false ){
             await send(ctx, `screenshots/${filename}.png`, { root: __dirname + '/public' });
-            console.log('file delivered (inline)');    
+            console.log('file delivered (inline)');
+            //tmpStream.cleanupSync() // It removes the file!
         }else{
             ctx.response.attachment(`${download}.png`);
             await send(ctx, `screenshots/${filename}.png`, { root: __dirname + '/public' });
             console.log(`file delivered (download as "${download}")`);    
+            tmpStream.cleanupSync() // It removes the file!
         }
     })
 );

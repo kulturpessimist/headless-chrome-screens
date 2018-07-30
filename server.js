@@ -48,22 +48,12 @@ app.use(
           };
         options = Object.assign({}, minimal, options);
         console.info('Shooting', url, 'with options', options);
-        const page = await browserless.page();
-        page.setViewport({
-            width: 1920, height:1080, deviceScaleFactor:2, isLandscape: true
-        });
-        options.path = `./public/screenshots/${filename}`;
-        const shoot = await page.screenshot(options)
-
-        console.log(shoot)
-        //const tmpStream = await browserless.screenshot(url, options)
-        //await send(ctx, shoot);
-        ctx.response.body = shoot; 
-        return ctx;
+        const tmpStream = await browserless.screenshot(url, options)
+        
         if( download === false ){
             await send(ctx, `screenshots/${filename}.png`, { root: __dirname + '/public' });
             console.log('file delivered (inline)');
-            //tmpStream.cleanupSync() // It removes the file!
+            tmpStream.cleanupSync() // It removes the file!
         }else{
             ctx.response.attachment(`${download}.png`);
             await send(ctx, `screenshots/${filename}.png`, { root: __dirname + '/public' });

@@ -34,9 +34,10 @@ app.use(
         let url = ctx.request.query.url || 'https://www.source.horse';
         let options = JSON.parse( ctx.request.query.options || null );
         let download = ctx.request.query.download || false;
-        let filename = new Buffer.from(url).toString('base64');//slugg(url).substring(0,97);
-         
+        let filename = new Buffer.from(url).toString('base64');
+        
         let minimal = {
+            device: 'iMac 27',
             type: 'png',
             fullPage: true,
             omitBackground: false,

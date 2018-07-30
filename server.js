@@ -1,18 +1,7 @@
 const   Koa = require("koa"),
         r = require("koa-route"),
         send = require("koa-send"),
-        slugg = require("slugg"),
-        browserless = require('browserless')({
-            ignoreHTTPSErrors: true,
-            args:[
-                '--disable-gpu',
-                '--single-process',
-                '--no-zygote',
-                '--no-sandbox',
-                '--hide-scrollbars',
-                '--ash-host-window-bounds=1920x1080*2'
-            ]
-        });
+        browserless = require('browserless')();
 /*
 ██╗  ██╗ ██████╗  █████╗ 
 ██║ ██╔╝██╔═══██╗██╔══██╗

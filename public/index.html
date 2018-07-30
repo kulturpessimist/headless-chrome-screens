@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Headless Chrome Screenshots</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<link href="https://fonts.googleapis.com/css?family=Fira+Mono:500|Spectral:700" rel="stylesheet">
+	<style>
+		body{
+			padding-left: 5vw;
+			padding-right: 5vw;
+			padding-top: 5vh;
+			padding-bottom: 5vh;
+			background-color: #CCC;
+		}
+		h1, h2, h3, h4, h5{
+			font-family: 'Spectral', serif;
+			font-weight: 700;
+			color: #222;
+		}
+		code, pre{
+			font-family: 'Fira Mono', monospace; 
+			font-weight: 500;
+			color: #333;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<h1>Headless Chrome Screenshots</h1>
+		<h2>REQUEST</h2>
+
+		<code>GET /png</code>
+		<h3>Parameters</h3>
+
+		<pre>
+{{url}} 	URL you want converted to PDF
+
+{{download}} 	Filename for download. If set server respondes with "Content-Disposition: attachment; filename="
+
+{{options}} 	
+	--url - (required) the url to take screenshot of 
+	--path - (optional) the path to save the screenshot to, default is 'image.png' 
+	--viewportWidth - (optional) the viewport width, default value is 1280 pixels
+	--viewportHeight - (optional) the viewport height, default value is 768 pixels
+	--userAgent - (optional) the user agent to use
+	--mobile - (optional) if this is set to true it will use a mobile user agent and set the viewport width to 320px and the viewport height to 480px, note that this overrides viewportWidth, viewportHeight and userAgent
+	--pdf - (optional) if true saves the screenshot as pdf
+	--mediaTypePrint - (optional) if set emulates the media type as print
+	--hide - (optional) a comma separated list of css selectors of elements which to hide using JavaScript, e.g if there are any pop-ups you want to hide
+	--visibility (optional) a comma separated list of css selectors of elements which to hide using JavaScript this is different than `hide` in that it sets the visibility property to hidden rather than the display to none
+	    </pre>
+
+		<h2>RESPONSE</h2>
+		<code>Binary PNG Object (inline or download)</code>
+	</main>
+</body>
+</html>

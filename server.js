@@ -15,7 +15,7 @@ const shoot = async function(ctx){
         let options = JSON.parse( ctx.request.query.options || null );
         const download = ctx.request.query.download || false;
         const filename = new Buffer.from(url).toString('base64');
-        const type = ctx.path.indexOf('png')>-1?'png':'jpg';
+        const type = ctx.path.indexOf('png')>-1?'png':'jpeg';
         
         let minimal = {
             device: 'iMac 27',

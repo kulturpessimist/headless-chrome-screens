@@ -12,6 +12,7 @@
     "koa": "^2.5.2",
     "koa-route": "^3.2.0",
     "koa-send": "^5.0.0",
-    "puppeteer": "^1.6.1"
+    "puppeteer": "^1.6.1",
+    "superagent": "^3.8.3"
   }
 }

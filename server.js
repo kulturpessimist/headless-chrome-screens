@@ -1,6 +1,7 @@
 const   Koa = require("koa"),
         r = require("koa-route"),
         send = require("koa-send"),
+        superagent = require('superagent'),
         browserless = require('browserless')();
 /*
 ██╗  ██╗ ██████╗  █████╗ 
@@ -11,13 +12,27 @@ const   Koa = require("koa"),
 ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
 */
 const screenshots = {
-   shoot: async function(ctx){
+    check: async function(url, ctx){
+        try{
+            const check = await superagent.get(url)
+        } catch(e){
+            console.log('inline',e);
+            return false;
+        }
+        return true;
+    },
+    shoot: async function(ctx){
         const url = ctx.request.query.url || 'https://www.source.horse';
         let options = JSON.parse( ctx.request.query.options || null );
         const download = ctx.request.query.download || false;
         const filename = new Buffer.from(url).toString('base64');
         const type = ctx.path.indexOf('png')>-1?'png':'jpeg';
         
+        const check = await screenshots.check(url, ctx);
+        if(!check){
+            await send(ctx, '404.png', { root: __dirname + '/public' });
+            return;
+        }
         let minimal = {
             // device: 'iMac 27',
             viewport: {

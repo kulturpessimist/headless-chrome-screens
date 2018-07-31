@@ -10,7 +10,8 @@ const   Koa = require("koa"),
 ██║  ██╗╚██████╔╝██║  ██║
 ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
 */
-const shoot = async function(ctx){
+const screenshots = {
+   shoot: async function(ctx){
         const url = ctx.request.query.url || 'https://www.source.horse';
         let options = JSON.parse( ctx.request.query.options || null );
         const download = ctx.request.query.download || false;
@@ -39,23 +40,23 @@ const shoot = async function(ctx){
 
         if( download === false ){
             await send(ctx, `screenshots/${filename}.${type}`, { root: __dirname + '/public' });
-            tmpStream.cleanupSync();
+            //tmpStream.cleanupSync();
         }else{
             ctx.response.attachment(`${download}.${type}`);
             await send(ctx, `screenshots/${filename}.${type}`, { root: __dirname + '/public' });
-            tmpStream.cleanupSync();
+            //tmpStream.cleanupSync();
         }
+    },
+    index: async function(ctx){
+        await send(ctx, 'index.html', { root: __dirname + '/public' });
+    }
 }
 
 const app = new Koa();
-app.use( 
-    r.get('/', async (ctx) => {
-        await send(ctx, 'index.html', { root: __dirname + '/public' });
-    })
-);
-app.use( r.get('/png', shoot) );
-app.use( r.get('/jpg', shoot) );
-app.use( r.get('/jpeg', shoot) );
+app.use( r.get('/',     screenshots.index) );
+app.use( r.get('/png',  screenshots.shoot) );
+app.use( r.get('/jpg',  screenshots.shoot) );
+app.use( r.get('/jpeg', screenshots.shoot) );
 // launch our server on the ENV Port or 3000...
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

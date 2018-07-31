@@ -11,9 +11,8 @@ const   Koa = require("koa"),
 ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
 */
 const shoot = async function(ctx){
-        console.log(ctx.path);
         const url = ctx.request.query.url || 'https://www.source.horse';
-        const options = JSON.parse( ctx.request.query.options || null );
+        let options = JSON.parse( ctx.request.query.options || null );
         const download = ctx.request.query.download || false;
         const filename = new Buffer.from(url).toString('base64');
         const type = ctx.path.indexOf('png')>-1?'png':'jpg';

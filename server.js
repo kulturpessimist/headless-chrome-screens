@@ -18,7 +18,12 @@ const shoot = async function(ctx){
         const type = ctx.path.indexOf('png')>-1?'png':'jpeg';
         
         let minimal = {
-            device: 'iMac 27',
+            // device: 'iMac 27',
+            viewport: {
+                width:1280,
+                height:720,
+                deviceScaleFactor:2
+            },
             type: type,
             fullPage: true,
             omitBackground: false,
@@ -29,7 +34,7 @@ const shoot = async function(ctx){
             }
         };
         options = Object.assign({}, minimal, options);
-        console.info(`Saving ${url} as ${filename}.${type} with options ${options}`);
+        console.info(`Saving ${url} as ${filename}.${type} with options`, options);
         const tmpStream = await browserless.screenshot(url, options)
 
         if( download === false ){

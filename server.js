@@ -23,24 +23,22 @@ const shoot = async function(ctx){
             fullPage: true,
             omitBackground: false,
             tmpOpts: {
-              path: './public/screenshots/',
-              name: `${filename}`,
-              enoent: false
+                path: './public/screenshots/',
+                name: `${filename}`,
+                enoent: false
             }
-          };
+        };
         options = Object.assign({}, minimal, options);
-        console.info('Shooting', url, 'with options', options);
+        console.info(`Saving ${url} as ${filename}.${type} with options ${options}`);
         const tmpStream = await browserless.screenshot(url, options)
 
         if( download === false ){
-            await send(ctx, `screenshots/${filename}.png`, { root: __dirname + '/public' });
-            console.log('file delivered (inline)');
-            tmpStream.cleanupSync() // It removes the file!
+            await send(ctx, `screenshots/${filename}.${type}`, { root: __dirname + '/public' });
+            tmpStream.cleanupSync();
         }else{
-            ctx.response.attachment(`${download}.png`);
-            await send(ctx, `screenshots/${filename}.png`, { root: __dirname + '/public' });
-            console.log(`file delivered (download as "${download}")`);    
-            tmpStream.cleanupSync() // It removes the file!
+            ctx.response.attachment(`${download}.${type}`);
+            await send(ctx, `screenshots/${filename}.${type}`, { root: __dirname + '/public' });
+            tmpStream.cleanupSync();
         }
 }
 

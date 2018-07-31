@@ -26,7 +26,7 @@ const screenshots = {
                 deviceScaleFactor:2
             },
             type: type,
-            fullPage: true,
+            fullPage: false,
             omitBackground: false,
             tmpOpts: {
                 path: './public/screenshots/',

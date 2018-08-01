@@ -14,10 +14,24 @@ const   Koa = require("koa"),
 const screenshots = {
     check: async function(url, ctx){
         try{
-            const check = await superagent.get(url).timeout({ response: 5000 });
+            const check = await superagent
+                .head(url)
+                .redirects(10)
+                .timeout({ response: 5000 });
+            //console.debug('Check:', check);
+            console.log('Check:', check.statusCode);
         } catch(e){
-            console.log('check error is',e);
-            return false;
+            console.log('Check:', e);
+            if( typeof(e.code) === 'string' ){
+                console.log('check error is',e);
+                return false;    
+            }else if(e.statusCode > 308){
+                console.log('check error is',e);
+                return false;  
+            }else{
+                console.log('status error but', e);
+                return true;
+            }
         }
         return true;
     },

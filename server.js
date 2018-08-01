@@ -14,9 +14,9 @@ const   Koa = require("koa"),
 const screenshots = {
     check: async function(url, ctx){
         try{
-            const check = await superagent.get(url)
+            const check = await superagent.get(url).timeout({ response: 5000 });
         } catch(e){
-            console.log('inline',e);
+            console.log('check error is',e);
             return false;
         }
         return true;

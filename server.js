@@ -40,7 +40,7 @@ const screenshots = {
         const url = ctx.request.query.url || 'https://www.source.horse';
         let options = JSON.parse( ctx.request.query.options || null );
         const download = ctx.request.query.download || false;
-        const filename = new Buffer.from(url).toString('base64');
+        const filename = Math.random().toString(36).substring(2); //new Buffer.from(url).toString('base64');
         const type = ctx.path.indexOf('png')>-1?'png':'jpeg';
         
         const check = await screenshots.check(url, ctx);
